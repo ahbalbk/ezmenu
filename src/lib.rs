@@ -1,0 +1,1 @@
+pub use ezmenu_macro::*;
