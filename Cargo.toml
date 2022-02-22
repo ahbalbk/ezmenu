@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Ahmad Baalbaky <ahmad@salondesdevs.fr>"]
 documentation = "https://docs.rs/ezmenu-derive"
 description = "Builds a CLI menu with a derive."
-repository = "https://github.com/ahbalbk/ezmenu"
+repository = "https://github.com/ahbalbk/ezmenu-derive"
 keywords = ["cli", "derive", "menu", "interface"]
 categories = ["command-line-interface"]
 license = "MIT"
@@ -13,5 +13,5 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ezmenu-macro = { version = "0.2.5", path = "ezmenu-macro" }
+ezmenu-macro = { version = "0.2.5", path = "ezmenu-macros" }
 ezmenu = "0.2.5"
