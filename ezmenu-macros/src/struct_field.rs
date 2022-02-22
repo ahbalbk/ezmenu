@@ -54,7 +54,7 @@ impl ToTokens for FieldFormatting {
         };
 
         tokens.extend(quote! {
-            .fmt(::ezmenu::StructFieldFormatting {
+            .fmt(::ezmenu_derive::ezmenu::StructFieldFormatting {
                 #chip
                 #prefix
                 #new_line
@@ -273,7 +273,7 @@ impl ToTokens for FieldMenuInit {
         {
             let msg = &self.msg;
             tokens.extend(quote! {
-                ::ezmenu::StructField::from(#msg)
+                ::ezmenu_derive::ezmenu::StructField::from(#msg)
             });
         }
         self.default.to_tokens(tokens);

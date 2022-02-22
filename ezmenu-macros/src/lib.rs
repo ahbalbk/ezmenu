@@ -36,7 +36,7 @@ pub fn parsed(_attr: pm::TokenStream, ts: pm::TokenStream) -> pm::TokenStream {
     } else {
         abort!(
             input,
-            "ezmenu::parsed macro attribute only works on unit-like enums."
+            "ezmenu_derive::ezmenu::parsed macro attribute only works on unit-like enums."
         )
     }
     .into()
@@ -54,12 +54,12 @@ fn build_parsed_enum(input: &DeriveInput, data: &DataEnum) -> TokenStream {
     quote! {
         #input
         impl ::std::str::FromStr for #ident {
-            type Err = ::ezmenu::MenuError;
+            type Err = ::ezmenu_derive::ezmenu::MenuError;
 
             fn from_str(s: &str) -> Result<Self, Self::Err> {
                 match s.to_lowercase().as_str() {
                     #(#inputs => Ok(Self::#outputs),)*
-                    _ => Err(::ezmenu::MenuError::Other(
+                    _ => Err(::ezmenu_derive::ezmenu::MenuError::Other(
                         // necessary to provide error because default value can be provided
                         Box::new(format!("unrecognized input for `{}`", s))))
                 }
@@ -86,8 +86,9 @@ pub fn build_menu(ts: pm::TokenStream) -> pm::TokenStream {
 fn def_init(menu_desc: MenuInit) -> TokenStream {
     let fields = menu_desc.fields.iter().map(|field| &field.kind);
     quote! {
-        pub fn from_menu() -> ::ezmenu::MenuResult<Self> {
-            let mut menu = ::ezmenu::StructMenu::default()
+        pub fn from_menu() -> ::ezmenu_derive::ezmenu::MenuResult<Self> {
+            use ::ezmenu_derive::ezmenu::Menu;
+            let mut menu = ::ezmenu_derive::ezmenu::StructMenu::default()
                 #menu_desc;
             Ok(Self {#(
                 #fields
