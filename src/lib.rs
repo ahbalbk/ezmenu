@@ -1,1 +1,1 @@
-pub use ezmenu_macro::*;
+pub use ezmenu_macros::*;
