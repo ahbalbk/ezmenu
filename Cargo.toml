@@ -1,11 +1,11 @@
 [package]
 name = "ezmenu"
-version = "0.2.8"
+version = "0.2.9"
 edition = "2021"
 authors = ["Ahmad Baalbaky <ahmad@salondesdevs.fr>"]
-documentation = "https://docs.rs/ezmenu-derive"
-description = "Builds a CLI menu with a derive."
-repository = "https://github.com/ahbalbk/ezmenu-derive"
+documentation = "https://docs.rs/ezmenu"
+description = "Builds a CLI menu with simple macros."
+repository = "https://github.com/ahbalbk/ezmenu"
 keywords = ["cli", "derive", "menu", "interface"]
 categories = ["command-line-interface"]
 license = "MIT"
@@ -17,4 +17,4 @@ parsed = ["ezmenu-macros/parsed"]
 
 [dependencies]
 ezmenu-macros = { version = "0.2.5", path = "ezmenu-macros" }
-ezmenu = "=0.2.7"
+ezmenulib = "0.2.7"

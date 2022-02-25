@@ -35,3 +35,13 @@ Hello there!
 * Give a number: 1000
 values provided: name=Ahmad, number=1000
 ```
+
+## Documentation
+
+You can find all the crate documentation on [Docs.rs](https://docs.rs/ezmenu).
+You can also check the [make-license program example](example) to learn with a practical way.
+
+## WIP
+
+This project is still in development.
+You can check the [EZMenu project](https://github.com/users/ahbalbk/projects/4) to look at my todolist :D
