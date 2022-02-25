@@ -132,7 +132,7 @@
 //! ### Example
 //!
 //! ```
-//! use ezmenu::{MenuBool, MenuVec};
+//! use ezmenulib::{MenuBool, MenuVec};
 //!
 //! #[derive(Menu)]
 //! struct License {
@@ -169,6 +169,7 @@
 /// ## Example
 ///
 /// ```
+/// use ezmenu::lib::MenuVec;
 /// use ezmenu::MenuVec;
 ///
 /// #[derive(Menu)]
@@ -216,5 +217,5 @@ pub use ezmenu_macros::parsed;
 /// The re-exportation of the [`ezmenulib`](https://docs.rs/ezmenulib/)
 /// crate for the macro expansion.
 pub mod lib {
-    pub use ezmenu::*;
+    pub use ezmenulib::*;
 }
