@@ -1,16 +1,19 @@
 [package]
 name = "ezmenu-macros"
-version = "0.2.5"
+version = "0.2.7"
 edition = "2021"
 authors = ["Ahmad Baalbaky <ahmad@salondesdevs.fr>"]
-documentation = "https://docs.rs/ezmenu-derive"
+documentation = "https://docs.rs/ezmenu-macros"
 description = "Builds a CLI menu with a derive."
-repository = "https://github.com/ahbalbk/ezmenu-derive"
+repository = "https://github.com/ahbalbk/ezmenu-macros"
 keywords = ["cli", "derive", "menu", "interface"]
 categories = ["command-line-interface"]
 license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+default = ["derive", "parsed"]
+derive = []
+parsed = []
 
 [lib]
 proc-macro = true

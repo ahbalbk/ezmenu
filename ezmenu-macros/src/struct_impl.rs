@@ -3,7 +3,7 @@ use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use syn::{Lit, LitStr, Meta, NestedMeta};
 
-/// Wrapper used for the expansion of the `StructMenu::title` method call.
+/// Wrapper used for the expansion of the `ValueMenu::title` method call.
 struct MenuTitle(LitStr);
 
 impl ToTokens for MenuTitle {
@@ -115,8 +115,8 @@ impl From<Meta> for MetaMenuDesc {
     }
 }
 
-/// Wrapper used for the expansion of the `StructMenu::title`
-/// and `StructMenu::fmt` method calls
+/// Wrapper used for the expansion of the `ValueMenu::title`
+/// and `ValueMenu::fmt` method calls
 struct AllMenuInit {
     title: Option<MenuTitle>,
     fmt: FieldFormatting,
@@ -152,10 +152,6 @@ pub(crate) struct MenuInit {
 impl ToTokens for MenuInit {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         self.all.to_tokens(tokens);
-        let fields = &self.fields;
-        tokens.extend(quote! {#(
-            .with_field(#fields)
-        )*})
     }
 }
 

@@ -1,4 +1,4 @@
-//! This crate is a derive procedural macro for `EZMenu` crate.
+//! This crate is a derive procedural macro for `ezmenu` crate.
 //! It should not be used directly. You must use the [`ezmenu`](https://docs.rs/ezmenu) crate.
 
 mod struct_field;
@@ -20,13 +20,15 @@ use syn::{
     Ident,
 };
 
-// TODO: parser attribute
-#[proc_macro_attribute]
-#[proc_macro_error]
-pub fn parser(_attr: pm::TokenStream, _ts: pm::TokenStream) -> pm::TokenStream {
-    pm::TokenStream::new()
-}
+// // TODO: parser attribute
+// #[proc_macro_attribute]
+// #[proc_macro_error]
+// pub fn parser(_attr: pm::TokenStream, _ts: pm::TokenStream) -> pm::TokenStream {
+//     pm::TokenStream::new()
+// }
 
+
+#[cfg(feature = "parsed")]
 #[proc_macro_attribute]
 #[proc_macro_error]
 pub fn parsed(_attr: pm::TokenStream, ts: pm::TokenStream) -> pm::TokenStream {
@@ -36,7 +38,7 @@ pub fn parsed(_attr: pm::TokenStream, ts: pm::TokenStream) -> pm::TokenStream {
     } else {
         abort!(
             input,
-            "ezmenu_derive::ezmenu::parsed macro attribute only works on unit-like enums."
+            "ezmenu_derive::ezmenu::parsed macro attribute only works on unit enums."
         )
     }
     .into()
@@ -54,12 +56,12 @@ fn build_parsed_enum(input: &DeriveInput, data: &DataEnum) -> TokenStream {
     quote! {
         #input
         impl ::std::str::FromStr for #ident {
-            type Err = ::ezmenu_derive::ezmenu::MenuError;
+            type Err = ::ezmenu::lib::MenuError;
 
             fn from_str(s: &str) -> Result<Self, Self::Err> {
                 match s.to_lowercase().as_str() {
                     #(#inputs => Ok(Self::#outputs),)*
-                    _ => Err(::ezmenu_derive::ezmenu::MenuError::Other(
+                    _ => Err(::ezmenu::lib::MenuError::Other(
                         // necessary to provide error because default value can be provided
                         Box::new(format!("unrecognized input for `{}`", s))))
                 }
@@ -68,6 +70,7 @@ fn build_parsed_enum(input: &DeriveInput, data: &DataEnum) -> TokenStream {
     }
 }
 
+#[cfg(feature = "derive")]
 #[proc_macro_derive(Menu, attributes(menu))]
 #[proc_macro_error]
 pub fn build_menu(ts: pm::TokenStream) -> pm::TokenStream {
@@ -84,19 +87,20 @@ pub fn build_menu(ts: pm::TokenStream) -> pm::TokenStream {
 }
 
 fn def_init(menu_desc: MenuInit) -> TokenStream {
-    let fields = menu_desc.fields.iter().map(|field| &field.kind);
+    let fields = &menu_desc.fields;
+    let fields_instance = fields.clone().into_iter().map(|f| f.kind);
     quote! {
-        pub fn from_menu() -> ::ezmenu_derive::ezmenu::MenuResult<Self> {
-            use ::ezmenu_derive::ezmenu::Menu;
-            let mut menu = ::ezmenu_derive::ezmenu::StructMenu::default()
+        pub fn from_menu_safe() -> ::ezmenu::lib::MenuResult<Self> {
+            use ::ezmenu::lib::Menu;
+            let mut menu = ::ezmenu::lib::ValueMenu::from([#(#fields),*])
                 #menu_desc;
             Ok(Self {#(
-                #fields
+                #fields_instance
             )*})
         }
 
-        pub fn from_menu_unwrap() -> Self {
-            Self::from_menu()
+        pub fn from_menu() -> Self {
+            Self::from_menu_safe()
                 .expect("An error occurred while processing menu")
         }
     }

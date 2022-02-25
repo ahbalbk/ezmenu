@@ -4,7 +4,8 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{Field, Lit, LitBool, LitStr, Meta, NestedMeta, Path};
 
-/// Wrapper used for the expansion of the `StructFieldFormatting` struct instantiation.
+/// Wrapper used for the expansion of the `ValueFieldFormatting` struct instantiation.
+#[derive(Clone)]
 pub(crate) struct FieldFormatting {
     pub chip: Option<LitStr>,
     pub prefix: Option<LitStr>,
@@ -54,7 +55,7 @@ impl ToTokens for FieldFormatting {
         };
 
         tokens.extend(quote! {
-            .fmt(::ezmenu_derive::ezmenu::StructFieldFormatting {
+            .fmt(::ezmenu::lib::ValueFieldFormatting {
                 #chip
                 #prefix
                 #new_line
@@ -67,6 +68,7 @@ impl ToTokens for FieldFormatting {
 
 /// Wrapper used for the expansion of the `StructField::default` method call.
 /// It stringifies the literal value if not already a string literal.
+#[derive(Clone)]
 struct DefaultValue(Lit);
 
 impl ToTokens for DefaultValue {
@@ -85,6 +87,7 @@ impl ToTokens for DefaultValue {
 }
 
 /// Enum used to distinguish between simple output fields and mapped output fields.
+#[derive(Clone)]
 pub(crate) enum FieldMenuInitKind {
     /// Simply ask the value then returns it.
     Simple(Ident),
@@ -96,7 +99,7 @@ impl ToTokens for FieldMenuInitKind {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         tokens.extend(match self {
             Self::Simple(ident) => quote! {
-                #ident: menu.next()?,
+                #ident: menu.next_output()?,
             },
             Self::Mapped(ident, func) => quote! {
                 #ident: menu.next_map(#func)?,
@@ -231,6 +234,7 @@ impl From<Meta> for MetaFieldDesc {
 }
 
 /// Wrapper used for the expansion of the `StructField` struct methods calls.
+#[derive(Clone)]
 pub(crate) struct FieldMenuInit {
     // if no lit provided, using field ident
     msg: LitStr,
@@ -273,7 +277,7 @@ impl ToTokens for FieldMenuInit {
         {
             let msg = &self.msg;
             tokens.extend(quote! {
-                ::ezmenu_derive::ezmenu::StructField::from(#msg)
+                ::ezmenu::lib::ValueField::from(#msg)
             });
         }
         self.default.to_tokens(tokens);
