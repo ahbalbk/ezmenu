@@ -1,14 +1,14 @@
 //! Fast designing menus for your Rust CLI programs.
 //!
 //! This crates provides many procedural macros to easily build menus.
-//! It uses the [`ezmenu`](https://docs.rs/ezmenu) library crate in its expansion.
+//! It uses the [`ezmenulib`](https://docs.rs/ezmenulib) library crate in its expansion.
 //!
 //! # Example
 //!
 //! Here is an example of how to use the `derive(Menu)` macro
 //! (it takes the same example as the documentation of the `ezmenu` library):
 //! ```
-//! use ezmenu_derive::Menu;
+//! use ezmenu::Menu;
 //!
 //! #[derive(Menu)]
 //! #[menu(title = "Hello there!")]
@@ -96,12 +96,19 @@
 //! ## Use custom value types
 //!
 //! If the user has to provide a value which corresponds to your specific type,
-//! you only need to add the `ezmenu_derive::parsed` attribute on that type.
+//! you can add the `parsed` feature in your `Cargo.toml`:
+//!
+//! ```toml
+//! [dependencies.ezmenu]
+//! version = "0.2"
+//! features = ["parsed"]
+//! ```
+//! Therefore, you only need to add the `ezmenu::parsed` attribute on that type.
 //!
 //! ### Example
 //!
 //! ```
-//! #[ezmenu_derive::parsed]
+//! #[ezmenu::parsed]
 //! enum Type {
 //!     MIT,
 //!     BSD,
@@ -135,6 +142,24 @@
 //!     // ...
 //! }
 //! ```
+//!
+//! ## Features
+//!
+//! This crate includes many features to allow you control your project building.
+//!
+//! For instance, the `"derive"` feature unlocks the `derive(Menu)` macro and is set by default,
+//! and the `"parsed"` feature unlocks the `ezmenu::parsed` attribute macro.
+//!
+//! For example, if you only need to use the `parsed` feature to implement `FromStr` trait
+//! on a type, you can do so by adding this to your `Cargo.toml` file:
+//! ```toml
+//! [dependencies.ezmenu]
+//! default-features = false
+//! features = ["parsed"]
+//! version = "0.2"
+//! ```
+//!
+//! Then you can add `#[ezmenu::parsed]` on that type and you'll be done :D
 #![deny(missing_docs)]
 
 /// The `derive(Menu)` procedural macro.
@@ -172,7 +197,7 @@ pub use ezmenu_macros::Menu;
 /// ## Example
 ///
 /// ```
-/// #[ezmenu_derive::parsed]
+/// #[ezmenu::parsed]
 /// enum Type {
 ///     MIT,
 ///     GPL,
@@ -188,7 +213,8 @@ pub use ezmenu_macros::Menu;
 #[cfg(feature = "parsed")]
 pub use ezmenu_macros::parsed;
 
-/// The re-exportation of the `ezmenu` crate for the macro expansion.
+/// The re-exportation of the [`ezmenulib`](https://docs.rs/ezmenulib/)
+/// crate for the macro expansion.
 pub mod lib {
     pub use ezmenu::*;
 }
